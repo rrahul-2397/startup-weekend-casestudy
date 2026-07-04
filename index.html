@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FrAnK-U — Designing a reminder app with attitude in 54 hours | Rahul Ramesh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fragment+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF5EE;
+    --paper-deep:#F3EBDF;
+    --ink:#211D18;
+    --ink-soft:#5C554B;
+    --coral:#EF4823;
+    --coral-deep:#C93312;
+    --coral-wash:#FDE8E1;
+    --line:#E2D8C8;
+    --marker:#B98A00;
+    --marker-wash:#FFF6DC;
+    --serif:"Fraunces", Georgia, serif;
+    --sans:"Archivo", Helvetica, sans-serif;
+    --mono:"Fragment Mono", monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* grain */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  ::selection{background:var(--coral);color:#fff}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .prose{max-width:640px}
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:22px 0;border-bottom:1px solid var(--line);
+  }
+  .topbar .name{font-family:var(--mono);font-size:13px;letter-spacing:.06em}
+  .topbar .tag{font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+  .topbar .tag em{color:var(--coral);font-style:normal}
+
+  /* ---------- hero ---------- */
+  .hero{padding:88px 0 64px;position:relative;overflow:hidden}
+  .kicker{
+    font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--coral-deep);display:flex;align-items:center;gap:12px;
+    animation:rise .7s .05s both;
+  }
+  .kicker::before{content:"";width:34px;height:2px;background:var(--coral)}
+  .hero h1{
+    font-family:var(--serif);font-weight:560;font-size:clamp(42px,7vw,84px);
+    line-height:1.02;letter-spacing:-.02em;margin:26px 0 0;max-width:15ch;
+    animation:rise .7s .15s both;
+  }
+  .hero h1 .flip{color:var(--coral);font-style:italic;font-weight:480}
+  .hero .dek{
+    margin-top:28px;font-size:20px;line-height:1.6;color:var(--ink-soft);max-width:56ch;
+    animation:rise .7s .28s both;
+  }
+  .hero .dek strong{color:var(--ink);font-weight:600}
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+  .meta{
+    margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--ink);animation:rise .7s .4s both;
+  }
+  .meta>div{padding:16px 18px 20px 0;border-right:1px solid var(--line)}
+  .meta>div:last-child{border-right:none}
+  .meta dt{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);margin-bottom:6px}
+  .meta dd{font-size:15px;font-weight:600;line-height:1.45}
+
+  /* ---------- tl;dr band ---------- */
+  .tldr{
+    background:var(--ink);color:var(--paper);padding:56px 0;
+  }
+  .tldr .label{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--coral);margin-bottom:18px}
+  .tldr p{
+    font-family:var(--serif);font-size:clamp(21px,2.6vw,28px);line-height:1.5;font-weight:400;max-width:30em;
+  }
+  .tldr p em{color:var(--coral);font-style:italic}
+
+  /* ---------- sections ---------- */
+  section.chapter{padding:84px 0 24px;border-top:1px solid var(--line)}
+  .chap-head{display:grid;grid-template-columns:120px 1fr;gap:24px;margin-bottom:36px;align-items:baseline}
+  .chap-num{
+    font-family:var(--serif);font-size:64px;font-weight:300;font-style:italic;
+    color:var(--coral);line-height:1;
+  }
+  .chap-head h2{
+    font-family:var(--serif);font-size:clamp(30px,4vw,44px);font-weight:560;letter-spacing:-.015em;line-height:1.1;
+  }
+  .chap-body{display:grid;grid-template-columns:120px 1fr;gap:24px}
+  .chap-body .aside{
+    font-family:var(--mono);font-size:12px;color:var(--ink-soft);line-height:1.7;padding-top:6px;
+  }
+  .chap-body .content{max-width:680px}
+  .content p{margin-bottom:20px}
+  .content p:last-child{margin-bottom:0}
+  .content strong{font-weight:650}
+  .content a{color:var(--coral-deep)}
+
+  .pull{
+    font-family:var(--serif);font-size:26px;line-height:1.4;font-weight:480;
+    border-left:3px solid var(--coral);padding:6px 0 6px 26px;margin:36px 0;
+    max-width:26em;
+  }
+  .pull em{color:var(--coral-deep)}
+
+  /* decision cards */
+  .decision{
+    background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:28px 30px;margin:28px 0;position:relative;
+    box-shadow:0 2px 0 var(--line);
+  }
+  .decision .d-tag{
+    position:absolute;top:-11px;left:24px;background:var(--coral);color:#fff;
+    font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    padding:3px 10px;border-radius:99px;
+  }
+  .decision h3{font-family:var(--serif);font-size:22px;font-weight:600;margin:6px 0 10px}
+  .decision p{font-size:16px;color:var(--ink-soft);margin-bottom:10px}
+  .decision p:last-child{margin-bottom:0}
+  .decision .tradeoff{
+    font-size:14.5px;background:var(--paper-deep);border-radius:8px;padding:12px 16px;color:var(--ink)
+  }
+  .decision .tradeoff b{font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--coral-deep);display:block;margin-bottom:4px}
+
+  /* fill-in markers */
+  .todo{
+    display:block;border:1.5px dashed var(--marker);background:var(--marker-wash);
+    border-radius:10px;padding:14px 18px;margin:24px 0;font-size:14.5px;color:#6B5200;line-height:1.55;
+  }
+  .todo b{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:4px;color:var(--marker)}
+
+  /* iphone 13 mockups */
+  .phone-row{display:grid;gap:26px;margin:44px 0 10px}
+  .phone-row.cols-4{grid-template-columns:repeat(4,1fr)}
+  .phone-row.cols-5{grid-template-columns:repeat(5,1fr);gap:20px}
+  .phone-row.cols-3{grid-template-columns:repeat(3,1fr);max-width:760px;margin-left:auto;margin-right:auto}
+  .iphone13 .frame{
+    position:relative;background:#0E0E11;
+    border-radius:15% / 7%;
+    padding:3.2%;
+    box-shadow:
+      inset 0 0 3px rgba(255,255,255,.3),
+      0 22px 32px -18px rgba(33,29,24,.5);
+  }
+  /* side buttons */
+  .iphone13 .frame::before{
+    content:"";position:absolute;left:-1.2%;top:20%;width:1.2%;height:9%;
+    background:#0E0E11;border-radius:2px 0 0 2px;
+  }
+  .iphone13 .frame::after{
+    content:"";position:absolute;right:-1.2%;top:24%;width:1.2%;height:13%;
+    background:#0E0E11;border-radius:0 2px 2px 0;
+  }
+  .iphone13 .screen{
+    position:relative;aspect-ratio:390/844;border-radius:12% / 5.6%;overflow:hidden;background:#fff;
+  }
+  .iphone13 .screen img{
+    width:100%;height:100%;object-fit:cover;display:block;border:none;border-radius:0;
+    transform:scale(1.025);
+  }
+  /* notch */
+  .iphone13 .screen::before{
+    content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:46%;aspect-ratio:6.6/1;background:#0E0E11;
+    border-radius:0 0 26% 26% / 0 0 90% 90%;z-index:2;
+  }
+  .iphone13 .p-label{
+    display:block;text-align:center;font-family:var(--mono);font-size:12px;
+    color:var(--ink-soft);margin-top:14px;letter-spacing:.04em;
+  }
+  .iphone13 .p-label em{color:var(--coral-deep);font-style:normal}
+
+  /* figures */
+  figure{margin:44px 0}
+  figure.full{grid-column:1/-1}
+  figure img{
+    width:100%;display:block;border-radius:14px;border:1px solid var(--line);
+    background:#fff;
+  }
+  figcaption{
+    display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:baseline;
+    margin-top:14px;font-size:14.5px;color:var(--ink-soft);max-width:720px;line-height:1.6;
+  }
+  figcaption .fig-n{
+    font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--coral-deep);
+    text-transform:uppercase;white-space:nowrap;
+  }
+  figcaption b{color:var(--ink);font-weight:600}
+
+  /* constraint chips */
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0}
+  .chip{
+    font-family:var(--mono);font-size:13px;padding:9px 16px;border:1px solid var(--ink);
+    border-radius:99px;background:transparent;
+  }
+  .chip span{color:var(--coral-deep)}
+
+  /* timeline */
+  .timeline{margin:34px 0;border-top:1px solid var(--ink)}
+  .t-row{
+    display:grid;grid-template-columns:130px 170px 1fr;gap:18px;
+    padding:18px 0;border-bottom:1px solid var(--line);align-items:baseline;
+  }
+  .t-day{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--coral-deep)}
+  .t-what{font-weight:650;font-size:16px}
+  .t-desc{font-size:15px;color:var(--ink-soft)}
+
+  /* voice compare table */
+  .voice{
+    display:grid;grid-template-columns:1fr 1fr;gap:0;margin:30px 0;border:1px solid var(--line);
+    border-radius:14px;overflow:hidden;background:#fff;
+  }
+  .voice>div{padding:24px 26px}
+  .voice .them{border-right:1px solid var(--line);color:var(--ink-soft)}
+  .voice h4{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+  .voice .them h4{color:var(--ink-soft)}
+  .voice .us{background:var(--coral-wash)}
+  .voice .us h4{color:var(--coral-deep)}
+  .voice .bubble{
+    font-size:15px;border-radius:12px;padding:10px 14px;margin-bottom:10px;background:var(--paper-deep);
+  }
+  .voice .us .bubble{background:#fff}
+
+  /* outcomes */
+  .outcome-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:30px 0}
+  .outcome{
+    border:1px solid var(--line);background:#fff;border-radius:14px;padding:22px;
+  }
+  .outcome .o-label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
+  .outcome .o-val{font-family:var(--serif);font-size:22px;font-weight:600;line-height:1.25}
+
+  /* learnings list */
+  ol.learnings{list-style:none;counter-reset:l;margin:10px 0}
+  ol.learnings li{
+    counter-increment:l;display:grid;grid-template-columns:56px 1fr;gap:16px;
+    padding:22px 0;border-bottom:1px solid var(--line);
+  }
+  ol.learnings li::before{
+    content:counter(l,decimal-leading-zero);font-family:var(--mono);font-size:13px;color:var(--coral-deep);padding-top:4px;
+  }
+  ol.learnings b{display:block;font-size:17px;margin-bottom:4px}
+  ol.learnings span{color:var(--ink-soft);font-size:15.5px}
+
+  /* footer */
+  footer{margin-top:90px;background:var(--ink);color:var(--paper);padding:64px 0}
+  footer .big{font-family:var(--serif);font-size:clamp(26px,3.4vw,40px);font-weight:500;line-height:1.25;max-width:22em}
+  footer .big em{color:var(--coral);font-style:italic}
+  footer .row{display:flex;justify-content:space-between;align-items:baseline;margin-top:40px;font-family:var(--mono);font-size:13px;color:#A79E90;flex-wrap:wrap;gap:12px}
+  footer a{color:var(--paper)}
+
+  @media (max-width:820px){
+    .meta{grid-template-columns:1fr 1fr}
+    .meta>div:nth-child(2){border-right:none}
+    .chap-head,.chap-body{grid-template-columns:1fr;gap:8px}
+    .chap-num{font-size:44px}
+    .t-row{grid-template-columns:1fr;gap:4px}
+    .voice{grid-template-columns:1fr}
+    .phone-row.cols-4,.phone-row.cols-5{grid-template-columns:repeat(2,1fr)}
+    .phone-row.cols-3{grid-template-columns:repeat(2,1fr)}
+    .voice .them{border-right:none;border-bottom:1px solid var(--line)}
+    .outcome-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <span class="name">RAHUL RAMESH — PRODUCT DESIGN</span>
+    <span class="tag">CASE STUDY <em>01</em> / FRANK-U</span>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="kicker">Startup Weekend · Trinity's Entrepreneurial Society · Oct 2023</p>
+    <h1>A reminder app that <span class="flip">nags you</span> like a friend would.</h1>
+    <p class="dek">
+      Reminder apps are polite — and polite is easy to ignore. In 54 hours at Startup Weekend,
+      our team of three designed and pitched <strong>FrAnK-U</strong>: a to-do app whose entire
+      product bet is <strong>tone of voice</strong>. I owned all of the design — from concept
+      and UI to the landing page we pitched with.
+    </p>
+    <dl class="meta">
+      <div><dt>My role</dt><dd>Sole designer — concept, UI, brand voice, landing page</dd></div>
+      <div><dt>Team</dt><dd>3 people: PM, finance, me (design + engineering)</dd></div>
+      <div><dt>Timeline</dt><dd>54 hours, Friday evening → Sunday pitch</dd></div>
+      <div><dt>Output</dt><dd>13 app screens, notification system, landing page, pitch to VCs</dd></div>
+    </dl>
+  </section>
+</div>
+
+<!-- TLDR -->
+<section class="tldr">
+  <div class="wrap">
+    <p class="label">TL;DR — if you read one thing</p>
+    <p>
+      The habit-app market competes on features. We competed on <em>personality</em> —
+      designing blunt, funny notification copy as the core product, then building the
+      brand, UI, and business model around that single idea. I made every design
+      decision under a hard 54-hour deadline, and the judges'
+      feedback validated the direction.
+    </p>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- 01 CONTEXT -->
+  <section class="chapter" id="context">
+    <div class="chap-head">
+      <span class="chap-num">01</span>
+      <h2>The brief: a startup in a weekend</h2>
+    </div>
+    <div class="chap-body">
+      <aside class="aside">CONTEXT<br>&amp; CONSTRAINTS</aside>
+      <div class="content">
+        <p>
+          Startup Weekend is Trinity's Entrepreneurial Society's flagship three-day event:
+          strangers form teams on Friday night, build a business over the weekend, and pitch
+          to a panel of venture capitalists on Sunday. The constraint isn't a side note —
+          it <strong>shaped every design decision</strong> that follows.
+        </p>
+        <div class="chips">
+          <span class="chip"><span>54h</span> total, idea to pitch</span>
+          <span class="chip"><span>1</span> designer (me)</span>
+          <span class="chip"><span>0</span> existing brand or research</span>
+          <span class="chip"><span>1</span> shot in front of VCs</span>
+        </div>
+        <p>
+          With no time for polished research or iteration cycles, my job was to make the
+          <strong>fewest, highest-leverage design bets</strong> — and make each one legible
+          to a panel of investors in a ten-minute pitch.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 PROBLEM -->
+  <section class="chapter" id="problem">
+    <div class="chap-head">
+      <span class="chap-num">02</span>
+      <h2>The problem: reminders are easy to swipe away</h2>
+    </div>
+    <div class="chap-body">
+      <aside class="aside">PROBLEM<br>FRAMING</aside>
+      <div class="content">
+        <p>
+          Busy young adults don't fail to build habits because they lack reminder apps —
+          they already have Google Keep, Todoist, and a native Reminders app. They fail
+          because those reminders are <strong>emotionally weightless</strong>. A grey
+          notification that says "Gym — 7:30am" costs nothing to dismiss.
+        </p>
+        <p class="pull">
+          Nobody ignores a friend who texts <em>"get up, you said you'd go."</em>
+          Everybody ignores a notification that says "Reminder: Gym."
+        </p>
+        <p>
+          So we reframed the problem. Instead of competing with productivity tools on
+          organisation, FrAnK-U competes on <strong>accountability</strong>: an app that
+          talks to you the way a blunt friend does — hence the name, "Frank".
+          The AI angle was in generating that persuasive, personal copy per user, rather
+          than canned reminder text.
+        </p>
+        <span class="todo"><b>Add before publishing</b>
+          Evidence for this framing. Even hackathon-grade research counts: "We asked
+          12 attendees how many reminders they'd dismissed that day — the median was 6 of 7."
+          One real number here beats the phrase "we validated through market research."
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 DECISIONS -->
+  <section class="chapter" id="decisions">
+    <div class="chap-head">
+      <span class="chap-num">03</span>
+      <h2>Three design bets, made fast</h2>
+    </div>
+    <div class="chap-body">
+      <aside class="aside">KEY<br>DECISIONS</aside>
+      <div class="content">
+        <p>
+          With 54 hours, I couldn't explore broadly — I had to commit. These are the three
+          bets I made, why I made them, and what each one cost.
+        </p>
+
+        <div class="decision">
+          <span class="d-tag">Bet 01</span>
+          <h3>Tone of voice is the product, not a garnish</h3>
+          <p>
+            The differentiator lives in the notification, not the app. So I designed the
+            notification copy first and treated the app as the place you configure Frank,
+            not the place you live.
+          </p>
+          <div class="voice">
+            <div class="them">
+              <h4>Every other reminder app</h4>
+              <div class="bubble">Reminder: Gym</div>
+              <div class="bubble">You have 1 task due today</div>
+            </div>
+            <div class="us">
+              <h4>FrAnK-U</h4>
+              <div class="bubble">Get off your ass. Time for GYM. 🏋️</div>
+              <div class="bubble">Third snooze, huh? Bold strategy.</div>
+            </div>
+          </div>
+          <p class="tradeoff"><b>The trade-off I accepted</b>
+            Blunt copy will alienate some users. We scoped the tone to be user-controlled —
+            which led directly to Bet 02.</p>
+        </div>
+
+        <div class="decision">
+          <span class="d-tag">Bet 02</span>
+          <h3>A "nagging interval" the user sets themselves</h3>
+          <p>
+            Persistence is only charming when it's consented to. I designed a
+            <strong>nagging interval</strong> control into the profile — you tell Frank how
+            many times to hassle you before he gives up. It turns the app's most annoying
+            behaviour into its most personal setting.
+          </p>
+          <p class="tradeoff"><b>Why it matters</b>
+            This one control is the difference between "motivational" and "notification spam" —
+            and it gave the pitch a concrete answer to the inevitable "won't people just
+            uninstall this?" question.</p>
+        </div>
+
+        <div class="decision">
+          <span class="d-tag">Bet 03</span>
+          <h3>Ruthlessly minimal capture: two fields, one button</h3>
+          <p>
+            Todoist wins on power features; we couldn't out-feature it in a weekend and
+            shouldn't try. Creating a reminder in FrAnK-U asks exactly two things —
+            <strong>what</strong> and <strong>when</strong> — because our users are people
+            who abandon complex tools, not people who crave them.
+          </p>
+          <p class="tradeoff"><b>What I cut</b>
+            Projects, labels, priorities, sub-tasks. Every feature we didn't build was a
+            deliberate scope decision, not a gap.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 DESIGNS -->
+  <section class="chapter" id="designs">
+    <div class="chap-head">
+      <span class="chap-num">04</span>
+      <h2>The designs</h2>
+    </div>
+    <div class="chap-body">
+      <aside class="aside">UI +<br>BRAND</aside>
+      <div class="content">
+        <p>
+          I designed 13 screens in Figma across onboarding, capture, and notifications,
+          plus the marketing site. The visual language — a single loud coral on white,
+          mono-spaced brand type, an emoji as the logo — was chosen to feel
+          <strong>cheap, cheeky and confident</strong>, like the copy. A refined,
+          tasteful UI would have contradicted the product's voice.
+        </p>
+      </div>
+    </div>
+
+    <figure class="full">
+      <div class="phone-row cols-4">
+        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/onboarding-1.png" alt="FrAnK-U splash screen with a peace-sign emoji as the logo"></div></div><span class="p-label">Splash</span></div>
+        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/onboarding-2.png" alt="Value proposition screen reading 'Make Mundane Tasks Enjoyable' with a Get Started button"></div></div><span class="p-label">Value prop</span></div>
+        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/onboarding-3.png" alt="Sign-in screen with email, Google and Apple sign-in options"></div></div><span class="p-label">Sign in</span></div>
+        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/onboarding-4.png" alt="Empty home state reading 'Nothing to show!!' with a floating add button"></div></div><span class="p-label">First run</span></div>
+      </div>
+      <figcaption><span class="fig-n">Fig. 01</span><span><b>Onboarding in under 30 seconds.</b> Splash, one value-prop screen, social sign-in, and you land in the app. The ✌️ splash sets the tone before a single word of copy — this app is not going to lecture you about productivity.</span></figcaption>
+    </figure>
+
+    <figure class="full">
+      <div class="phone-row cols-5">
+        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-1.png" alt="Empty state with an expanded floating action button showing quick-add options"></div></div><span class="p-label">Empty state</span></div>
+        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-2.png" alt="Reminder list with All, Personal and Work filter pills and six reminders"></div></div><span class="p-label">The list</span></div>
+        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-3.png" alt="Profile screen with settings and a 'set nagging interval' stepper control"></div></div><span class="p-label"><em>Nagging interval</em></span></div>
+        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-4.png" alt="Create reminder screen with just a title field and a when field"></div></div><span class="p-label">Create — empty</span></div>
+        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-5.png" alt="Create reminder screen filled in with 'Gym' at 7:30am"></div></div><span class="p-label">Create — filled</span></div>
+      </div>
+      <figcaption><span class="fig-n">Fig. 02</span><span><b>The core loop.</b> Left to right: empty state ("Nothing to show!!" — even the empty state has attitude), the list with three fixed filters instead of user-managed folders, the profile with the <b>nagging interval</b> stepper from Bet 02, and the two-field create flow from Bet 03.</span></figcaption>
+    </figure>
+
+    <figure class="full">
+      <div class="phone-row cols-3">
+        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/lockscreen-1.png" alt="iPhone lock screen with a FrAnK-U notification reading 'Get off your ass. Time for GYM'"></div></div><span class="p-label">The nudge</span></div>
+        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/lockscreen-2.png" alt="Lock screen notification swiped left revealing Options and Clear actions"></div></div><span class="p-label">Swipe</span></div>
+        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/lockscreen-3.png" alt="Notification options expanded showing Done and Snooze actions"></div></div><span class="p-label">Done / Snooze</span></div>
+      </div>
+      <figcaption><span class="fig-n">Fig. 03</span><span><b>Where the product actually lives.</b> The lock-screen notification is the real UI — most users will interact with Frank here, not in the app. Swipe actions resolve to <b>Done</b> or <b>Snooze</b>, and snoozing is what triggers the nagging escalation.</span></figcaption>
+    </figure>
+
+    <figure class="full">
+      <img src="https://framerusercontent.com/images/rhkpgkgEYkHnOCavEfqV36LmKs.jpg" alt="FrAnK-U landing page with the headline 'Get shit done' over a dark gradient, and a merch shop page selling branded t-shirts, tote bags and mugs">
+      <figcaption><span class="fig-n">Fig. 04</span><span><b>The landing page led the pitch.</b> "Get shit done" was a deliberate risk — it filters for exactly the audience the product wants. The merch shop wasn't decoration: it supported the business-model slide by showing the brand could monetise beyond subscriptions.</span></figcaption>
+    </figure>
+
+    <span class="todo"><b>Add before publishing</b>
+      One process artifact — a photo of paper sketches, a whiteboard, or an early Figma
+      frame next to the final version. A single before/after is the cheapest way to show
+      you iterate rather than render.
+    </span>
+  </section>
+
+  <!-- 05 PROCESS -->
+  <section class="chapter" id="process">
+    <div class="chap-head">
+      <span class="chap-num">05</span>
+      <h2>How 54 hours actually went</h2>
+    </div>
+    <div class="chap-body">
+      <aside class="aside">PROCESS<br>UNDER PRESSURE</aside>
+      <div class="content">
+        <p>
+          I worked as designer <em>and</em> engineer on a three-person team with
+          Surpreet (product) and Daniele (finance) — so the process below is about
+          sequencing scarce hours, not a textbook double diamond.
+        </p>
+        <div class="timeline">
+          <div class="t-row"><span class="t-day">Fri evening</span><span class="t-what">Pitch, form, reframe</span><span class="t-desc">Team formed around the habit-motivation idea. We narrowed "AI motivation app" down to the one sharp claim we could defend: tone of voice as the product.</span></div>
+          <div class="t-row"><span class="t-day">Sat morning</span><span class="t-what">Validate &amp; position</span><span class="t-desc">Mapped the competitive field (Keep, Todoist, native Reminders) and picked the gap none of them will touch: personality. Agreed the B2B2C angle with Surpreet and Daniele.</span></div>
+          <div class="t-row"><span class="t-day">Sat afternoon</span><span class="t-what">Design the notification first</span><span class="t-desc">Wrote notification copy before drawing screens. Once the voice worked, the UI had a spec to obey.</span></div>
+          <div class="t-row"><span class="t-day">Sat night</span><span class="t-what">Screens &amp; brand</span><span class="t-desc">13 screens in Figma: onboarding, capture, list, profile, notification states. Coral + mono type locked in.</span></div>
+          <div class="t-row"><span class="t-day">Sun morning</span><span class="t-what">Landing page &amp; deck</span><span class="t-desc">Built the marketing site and merch concept to carry the business-model story; assembled design sections of the pitch.</span></div>
+          <div class="t-row"><span class="t-day">Sun evening</span><span class="t-what">Pitch to VCs</span><span class="t-desc">Presented FrAnK-U to the panel. Design carried the differentiation argument.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 OUTCOME -->
+  <section class="chapter" id="outcome">
+    <div class="chap-head">
+      <span class="chap-num">06</span>
+      <h2>Outcome &amp; honest reflection</h2>
+    </div>
+    <div class="chap-body">
+      <aside class="aside">RESULTS +<br>LEARNINGS</aside>
+      <div class="content">
+        <div class="outcome-grid">
+          <div class="outcome"><div class="o-label">Shipped in 54h</div><div class="o-val">13 screens, notification system &amp; landing page</div></div>
+          <div class="outcome"><div class="o-label">Judges' response</div><div class="o-val">Praised for innovation &amp; market potential</div></div>
+          <div class="outcome"><div class="o-label">My contribution</div><div class="o-val">100% of design; the pitch's differentiation story</div></div>
+        </div>
+        <span class="todo"><b>Add before publishing</b>
+          The concrete result: placement (winner? runner-up? top N of how many teams?) and
+          one direct quote from a judge if you can recall it. Specifics here do more for
+          credibility than anything else on this page.
+        </span>
+        <p>
+          Being honest: this was a concept sprint, not a shipped product. There are no
+          retention numbers, and the designs never met a real user. What this project
+          does show is the thing hackathons uniquely test — <strong>judgment under
+          constraint</strong>: what to design first, what to cut, and how to make design
+          decisions carry a business argument.
+        </p>
+        <ol class="learnings">
+          <li><div><b>Design the moment of truth first.</b><span>Starting with the notification — not the home screen — meant every screen after it had a purpose. I now start every project by asking where the product actually earns its keep.</span></div></li>
+          <li><div><b>A strong voice is a design system.</b><span>Once "blunt friend" was defined, decisions got faster: empty states, button labels, even the merch designed themselves. Personality scaled better than any component library could in 54 hours.</span></div></li>
+          <li><div><b>Pitching is a design skill.</b><span>VCs don't review Figma files; they buy narratives. Presenting to a panel taught me to frame design choices as business bets — a habit I've kept for every design review since.</span></div></li>
+          <li><div><b>What I'd do differently.</b><span>I'd spend two of those 54 hours testing the notification copy on strangers at the venue. The tone was our biggest bet, and we defended it with conviction when we could have defended it with evidence.</span></div></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p class="big">
+      FrAnK-U taught me that the strongest design decisions are the ones you can
+      <em>defend to an investor</em> — not just to another designer.
+    </p>
+    <div class="row">
+      <span>NEXT CASE STUDY →</span>
+      <span>RAHUL RAMESH · <a href="https://rahul-ramesh.design">rahul-ramesh.design</a></span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
