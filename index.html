@@ -6,7 +6,7 @@
 <title>FrAnK-U — Designing a reminder app with attitude in 54 hours | Rahul Ramesh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fragment+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Fragment+Mono&family=Bricolage+Grotesque:opsz,wght@12..96,300..800&display=swap" rel="stylesheet">
 <style>
   :root{
     --paper:#FAF5EE;
@@ -22,6 +22,18 @@
     --serif:"Fraunces", Georgia, serif;
     --sans:"Archivo", Helvetica, sans-serif;
     --mono:"Fragment Mono", monospace;
+
+    /* app palette (live screens) */
+    --f-coral:#EF4823;
+    --f-coral-deep:#C43415;
+    --f-coral-soft:#FFE4DB;
+    --f-ink:#231913;
+    --f-sub:#8A7A70;
+    --f-cream:#FFF9F2;
+    --f-card:#FFFFFF;
+    --f-line:#F3E6DC;
+    --f-green:#2E7D4F;
+    --brand:"Bricolage Grotesque", var(--sans);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -185,6 +197,157 @@
     color:var(--ink-soft);margin-top:14px;letter-spacing:.04em;
   }
   .iphone13 .p-label em{color:var(--coral-deep);font-style:normal}
+  .phone-row.cols-3w{grid-template-columns:repeat(3,1fr);gap:34px}
+
+  /* sprint-version toggle */
+  details.was{margin:10px 0 34px;border:1px solid var(--line);border-radius:14px;background:var(--paper-deep)}
+  details.was summary{
+    cursor:pointer;list-style:none;padding:16px 22px;
+    font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--ink-soft);
+  }
+  details.was summary::-webkit-details-marker{display:none}
+  details.was summary::before{content:"▸ ";color:var(--coral)}
+  details.was[open] summary::before{content:"▾ "}
+  details.was .inner{padding:0 22px 8px}
+  details.was .row-label{
+    font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-soft);margin:18px 0 0;
+  }
+  details.was .phone-row{margin:18px 0 22px}
+
+  /* ---------- live app screens ---------- */
+  .app{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    font-family:var(--sans);color:var(--f-ink);
+  }
+  .app *{line-height:1.35}
+  .statusbar{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 22px 4px;font-weight:600;font-size:12px;
+    position:relative;z-index:5;
+  }
+  .statusbar .icons{letter-spacing:1px;font-size:10px}
+  .app.dark{color:#fff}
+  .wordmark{font-family:var(--brand);font-weight:800;letter-spacing:-.02em}
+  .btn{
+    display:block;width:100%;text-align:center;background:var(--f-coral);color:#fff;
+    font-weight:700;font-size:15px;padding:15px 0;border-radius:999px;
+    box-shadow:0 6px 14px -6px rgba(196,52,21,.55);
+  }
+  .ghost{display:block;text-align:center;font-size:13px;color:var(--f-sub);margin-top:12px}
+
+  .s-splash{background:var(--f-cream)}
+  .s-splash .body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 26px}
+  .s-splash .peace{font-size:56px;margin-bottom:14px}
+  .s-splash h1{font-family:var(--brand);font-weight:800;font-size:44px;letter-spacing:-.03em;line-height:1.02;color:var(--f-ink)}
+  .s-splash h1 span{color:var(--f-coral)}
+  .s-splash .tag{margin-top:12px;font-size:15px;color:var(--f-sub);max-width:24ch}
+  .s-splash .cta{padding:0 22px 26px}
+
+  .s-home{background:var(--f-cream)}
+  .s-home .head{padding:12px 22px 0}
+  .s-home .brandrow{display:flex;justify-content:space-between;align-items:center}
+  .s-home .brandrow .wordmark{font-size:15px;color:var(--f-coral-deep)}
+  .s-home .avatar{width:26px;height:26px;border-radius:50%;background:var(--f-coral-soft);display:flex;align-items:center;justify-content:center;font-size:12px}
+  .s-home h1{font-family:var(--brand);font-weight:800;font-size:26px;letter-spacing:-.02em;margin-top:16px}
+  .s-home .sub{font-size:13.5px;color:var(--f-sub);margin-top:2px}
+  .s-home .sub b{color:var(--f-coral-deep);font-weight:700}
+  .s-home .body{flex:1;padding:16px 16px 0;overflow:hidden}
+  .sectionlabel{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--f-sub);margin:10px 8px 8px}
+  .task{
+    background:var(--f-card);border:1px solid var(--f-line);border-radius:16px;
+    padding:13px 14px;display:flex;gap:12px;align-items:center;margin-bottom:9px;
+    box-shadow:0 1px 2px rgba(35,25,19,.04);
+  }
+  .task .tick{width:22px;height:22px;border-radius:50%;border:2px solid #E5D5CA;flex:none}
+  .task.late{border-color:#F6C4B4;background:#FFF3EE}
+  .task.late .tick{border-color:var(--f-coral)}
+  .task .tx{flex:1;min-width:0}
+  .task .t-title{display:block;font-weight:700;font-size:14.5px}
+  .task .t-meta{display:block;font-size:12px;color:var(--f-sub);margin-top:1px}
+  .pill{font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:999px;white-space:nowrap}
+  .pill.red{background:var(--f-coral);color:#fff}
+  .pill.soft{background:var(--f-coral-soft);color:var(--f-coral-deep)}
+  .pill.grey{background:#F1EAE3;color:var(--f-sub)}
+  .task.done .t-title{text-decoration:line-through;color:var(--f-sub);font-weight:600}
+  .task.done .tick{background:var(--f-green);border-color:var(--f-green);position:relative}
+  .task.done .tick::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800}
+  .fab{
+    position:absolute;right:18px;bottom:24px;width:54px;height:54px;border-radius:50%;
+    background:var(--f-coral);color:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:26px;box-shadow:0 10px 18px -8px rgba(196,52,21,.6);z-index:6;
+  }
+
+  .s-create{background:var(--f-cream)}
+  .s-create .head{padding:12px 22px 0;display:flex;align-items:center;justify-content:space-between}
+  .s-create .head .x{font-size:16px;color:var(--f-sub)}
+  .s-create .head .t{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--f-sub)}
+  .s-create .body{flex:1;padding:10px 22px 0}
+  .biginput{
+    font-family:var(--brand);font-weight:800;font-size:30px;letter-spacing:-.02em;color:var(--f-ink);
+    border-bottom:3px solid var(--f-coral);padding:14px 0 10px;
+  }
+  .biginput .caret{display:inline-block;width:2px;height:26px;background:var(--f-coral);vertical-align:-3px;margin-left:2px}
+  .f-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--f-sub);margin:22px 0 9px}
+  .chips-row{display:flex;flex-wrap:wrap;gap:8px}
+  .chips-row .chip{
+    font-size:12.5px;font-weight:600;padding:8px 13px;border-radius:999px;
+    border:1.5px solid var(--f-line);background:#fff;color:var(--f-sub);
+  }
+  .chips-row .chip.on{background:var(--f-ink);border-color:var(--f-ink);color:#fff}
+  .preview{margin-top:24px;background:#fff;border:1.5px dashed #EBC9BC;border-radius:14px;padding:13px 15px}
+  .preview .p-t{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--f-coral-deep);display:flex;justify-content:space-between}
+  .preview .p-t span:last-child{text-transform:none;letter-spacing:0}
+  .preview .p-msg{font-size:14px;font-weight:600;margin-top:6px;color:var(--f-ink)}
+  .s-create .cta{padding:0 22px 24px}
+
+  .s-nag{background:var(--f-cream)}
+  .s-nag .head{padding:12px 22px 0}
+  .s-nag .back{font-size:14px;color:var(--f-sub)}
+  .s-nag h1{font-family:var(--brand);font-weight:800;font-size:25px;letter-spacing:-.02em;margin-top:14px;line-height:1.1}
+  .s-nag .sub{font-size:13px;color:var(--f-sub);margin-top:6px}
+  .s-nag .body{flex:1;padding:18px 18px 0}
+  .level{background:#fff;border:1.5px solid var(--f-line);border-radius:16px;padding:14px 15px;margin-bottom:10px}
+  .level .l-top{display:flex;align-items:center;gap:10px}
+  .level .dot{width:18px;height:18px;border-radius:50%;border:2px solid #E5D5CA;flex:none}
+  .level .l-name{font-weight:800;font-size:15px;font-family:var(--brand);letter-spacing:-.01em}
+  .level .l-desc{font-size:12.5px;color:var(--f-sub);margin:5px 0 0 28px}
+  .level.on{border-color:var(--f-coral);background:#FFF3EE;box-shadow:0 6px 16px -10px rgba(196,52,21,.4)}
+  .level.on .dot{border-color:var(--f-coral);background:var(--f-coral);box-shadow:inset 0 0 0 3px #FFF3EE}
+  .level .l-freq{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--f-coral-deep)}
+  .s-nag .cta{padding:0 22px 24px}
+
+  .s-lock{background:linear-gradient(160deg,#1D1430 0%,#3A1650 38%,#7A2358 68%,#C84A32 100%)}
+  .s-lock .clock{margin-top:34px;text-align:center}
+  .s-lock .clock .lockicon{font-size:13px;opacity:.85}
+  .s-lock .clock .time{font-family:var(--brand);font-weight:300;font-size:64px;letter-spacing:-.02em;line-height:1.05}
+  .s-lock .clock .date{font-size:13px;opacity:.85;margin-top:2px}
+  .s-lock .stack{margin-top:auto;padding:0 12px 18px;display:flex;flex-direction:column;gap:7px}
+  .notif{
+    background:rgba(255,255,255,.16);backdrop-filter:blur(10px);
+    border-radius:16px;padding:11px 13px;color:#fff;border:1px solid rgba(255,255,255,.12);
+  }
+  .notif .n-top{display:flex;align-items:center;gap:7px;font-size:10.5px;opacity:.8}
+  .notif .n-app{width:15px;height:15px;border-radius:4px;background:var(--f-coral);display:flex;align-items:center;justify-content:center;font-size:9px}
+  .notif .n-ago{margin-left:auto}
+  .notif .n-title{font-weight:700;font-size:13px;margin-top:4px}
+  .notif .n-body{font-size:12.5px;opacity:.92;margin-top:1px}
+  .notif.n2{transform:scale(.97);opacity:.92}
+  .notif.n3{transform:scale(.94);opacity:.8}
+  .s-lock .homebar{width:36%;height:4px;border-radius:99px;background:rgba(255,255,255,.85);margin:0 auto 10px}
+
+  .s-zero{background:var(--f-cream)}
+  .s-zero .body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 30px;text-align:center}
+  .s-zero .face{font-size:52px}
+  .s-zero h1{font-family:var(--brand);font-weight:800;font-size:27px;letter-spacing:-.02em;margin-top:14px;line-height:1.1}
+  .s-zero .sub{font-size:13.5px;color:var(--f-sub);margin-top:8px;max-width:24ch}
+  .streak{
+    margin-top:26px;background:#fff;border:1px solid var(--f-line);border-radius:16px;
+    padding:13px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 2px rgba(35,25,19,.05);
+  }
+  .streak .fire{font-size:22px}
+  .streak .s-n{font-family:var(--brand);font-weight:800;font-size:19px;line-height:1}
+  .streak .s-t{font-size:11px;color:var(--f-sub);margin-top:2px}
 
   /* figures */
   figure{margin:44px 0}
@@ -273,6 +436,7 @@
     .voice{grid-template-columns:1fr}
     .phone-row.cols-4,.phone-row.cols-5{grid-template-columns:repeat(2,1fr)}
     .phone-row.cols-3{grid-template-columns:repeat(2,1fr)}
+    .phone-row.cols-3w{grid-template-columns:1fr;max-width:340px;margin-left:auto;margin-right:auto}
     .voice .them{border-right:none;border-bottom:1px solid var(--line)}
     .outcome-grid{grid-template-columns:1fr}
   }
@@ -468,47 +632,191 @@
       <div class="content">
         <p>
           I designed 13 screens in Figma across onboarding, capture, and notifications,
-          plus the marketing site. The visual language — a single loud coral on white,
-          mono-spaced brand type, an emoji as the logo — was chosen to feel
-          <strong>cheap, cheeky and confident</strong>, like the copy. A refined,
-          tasteful UI would have contradicted the product's voice.
+          plus the marketing site, during the sprint. The visual language — a single loud
+          coral, an emoji as the logo — was chosen to feel <strong>cheap, cheeky and
+          confident</strong>, like the copy. In 2026 I revisited the UI, keeping every
+          sprint decision but raising the craft: real type hierarchy, accessible contrast,
+          and the escalation mechanic made visible. <strong>The screens below are that
+          revisit</strong> — the original 54-hour versions sit in the toggle underneath,
+          and the full before/after rationale is on the
+          <a href="redesign.html">redesign page</a>.
         </p>
       </div>
     </div>
 
     <figure class="full">
-      <div class="phone-row cols-4">
-        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/onboarding-1.png" alt="FrAnK-U splash screen with a peace-sign emoji as the logo"></div></div><span class="p-label">Splash</span></div>
-        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/onboarding-2.png" alt="Value proposition screen reading 'Make Mundane Tasks Enjoyable' with a Get Started button"></div></div><span class="p-label">Value prop</span></div>
-        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/onboarding-3.png" alt="Sign-in screen with email, Google and Apple sign-in options"></div></div><span class="p-label">Sign in</span></div>
-        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/onboarding-4.png" alt="Empty home state reading 'Nothing to show!!' with a floating add button"></div></div><span class="p-label">First run</span></div>
+      <div class="phone-row cols-3w">
+        <div class="iphone13"><div class="frame"><div class="screen">
+          <div class="app s-splash">
+            <div class="statusbar"><span>9:41</span><span class="icons">▐▐ ⏻</span></div>
+            <div class="body">
+              <div class="peace">✌️</div>
+              <h1>frank<span>·</span>u</h1>
+              <p class="tag">The friend who won't shut up until you've done it.</p>
+            </div>
+            <div class="cta"><span class="btn">Let's go</span><span class="ghost">skip the pep talk</span></div>
+          </div>
+        </div></div><span class="p-label">Splash</span></div>
+        <div class="iphone13"><div class="frame"><div class="screen">
+          <div class="app s-home">
+            <div class="statusbar"><span>9:41</span><span class="icons">▐▐ ⏻</span></div>
+            <div class="head">
+              <div class="brandrow"><span class="wordmark">frank·u</span><span class="avatar">✌️</span></div>
+              <h1>Morning, Rahul.</h1>
+              <p class="sub">You promised <b>3 things</b> today. Frank remembers.</p>
+            </div>
+            <div class="body">
+              <p class="sectionlabel">Today</p>
+              <div class="task late">
+                <span class="tick"></span>
+                <span class="tx"><span class="t-title">Gym</span><span class="t-meta">7:30 — 40 min ago · nag 2 of 5</span></span>
+                <span class="pill red">You're late</span>
+              </div>
+              <div class="task">
+                <span class="tick"></span>
+                <span class="tx"><span class="t-title">Call the bank</span><span class="t-meta">1:30 pm</span></span>
+                <span class="pill soft">Today</span>
+              </div>
+              <div class="task">
+                <span class="tick"></span>
+                <span class="tx"><span class="t-title">Drink water</span><span class="t-meta">Every 2 hours</span></span>
+                <span class="pill grey">Habit</span>
+              </div>
+              <p class="sectionlabel">Done · Frank approves</p>
+              <div class="task done">
+                <span class="tick"></span>
+                <span class="tx"><span class="t-title">Morning pages</span><span class="t-meta">8:05 am</span></span>
+              </div>
+            </div>
+            <span class="fab">+</span>
+          </div>
+        </div></div><span class="p-label">Home</span></div>
+        <div class="iphone13"><div class="frame"><div class="screen">
+          <div class="app s-create">
+            <div class="statusbar"><span>9:41</span><span class="icons">▐▐ ⏻</span></div>
+            <div class="head"><span class="x">✕</span><span class="t">New nag</span><span style="width:14px"></span></div>
+            <div class="body">
+              <div class="biginput">Gym<span class="caret"></span></div>
+              <p class="f-label">When</p>
+              <div class="chips-row"><span class="chip on">Tomorrow 7:30</span><span class="chip">Tonight</span><span class="chip">Pick a time</span></div>
+              <p class="f-label">Repeat</p>
+              <div class="chips-row"><span class="chip on">Weekdays</span><span class="chip">Every day</span><span class="chip">Once</span></div>
+              <div class="preview">
+                <p class="p-t"><span>Frank will say</span><span>↻ reroll</span></p>
+                <p class="p-msg">"Get off your ass. Gym. You know the deal. ✌️"</p>
+              </div>
+            </div>
+            <div class="cta"><span class="btn">Start nagging me</span></div>
+          </div>
+        </div></div><span class="p-label">Capture</span></div>
       </div>
-      <figcaption><span class="fig-n">Fig. 01</span><span><b>Onboarding in under 30 seconds.</b> Splash, one value-prop screen, social sign-in, and you land in the app. The ✌️ splash sets the tone before a single word of copy — this app is not going to lecture you about productivity.</span></figcaption>
+      <figcaption><span class="fig-n">Fig. 01</span><span><b>The daily loop</b> <i>(2026 revisit)</i><b>.</b> The splash states the promise in eight words — no stock illustration needed. Home frames tasks as promises, with the overdue card escalating visually: tinted background, "You're late" badge, and a <b>nag counter</b>. Capture stays two decisions — what and when — with a live preview of what Frank will actually say.</span></figcaption>
     </figure>
 
     <figure class="full">
-      <div class="phone-row cols-5">
-        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-1.png" alt="Empty state with an expanded floating action button showing quick-add options"></div></div><span class="p-label">Empty state</span></div>
-        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-2.png" alt="Reminder list with All, Personal and Work filter pills and six reminders"></div></div><span class="p-label">The list</span></div>
-        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-3.png" alt="Profile screen with settings and a 'set nagging interval' stepper control"></div></div><span class="p-label"><em>Nagging interval</em></span></div>
-        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-4.png" alt="Create reminder screen with just a title field and a when field"></div></div><span class="p-label">Create — empty</span></div>
-        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-5.png" alt="Create reminder screen filled in with 'Gym' at 7:30am"></div></div><span class="p-label">Create — filled</span></div>
+      <div class="phone-row cols-3w">
+        <div class="iphone13"><div class="frame"><div class="screen">
+          <div class="app s-nag">
+            <div class="statusbar"><span>9:41</span><span class="icons">▐▐ ⏻</span></div>
+            <div class="head">
+              <span class="back">← Settings</span>
+              <h1>How annoying should Frank be?</h1>
+              <p class="sub">You can change this any time. Frank won't take it personally.</p>
+            </div>
+            <div class="body">
+              <div class="level">
+                <div class="l-top"><span class="dot"></span><span class="l-name">Gentle</span><span class="l-freq">1 nudge</span></div>
+                <p class="l-desc">"One polite reminder. Then I'll mind my business."</p>
+              </div>
+              <div class="level on">
+                <div class="l-top"><span class="dot"></span><span class="l-name">Persistent</span><span class="l-freq">every 15 min · ×5</span></div>
+                <p class="l-desc">"I'll keep showing up until you cave. Like cardio for your conscience."</p>
+              </div>
+              <div class="level">
+                <div class="l-top"><span class="dot"></span><span class="l-name">Relentless</span><span class="l-freq">every 5 min · ∞</span></div>
+                <p class="l-desc">"I will ruin your notifications. Lovingly."</p>
+              </div>
+            </div>
+            <div class="cta"><span class="btn">Save — Persistent it is</span></div>
+          </div>
+        </div></div><span class="p-label"><em>Nagging interval</em></span></div>
+        <div class="iphone13"><div class="frame"><div class="screen">
+          <div class="app dark s-lock">
+            <div class="statusbar"><span></span><span class="icons">▐▐ ⏻</span></div>
+            <div class="clock">
+              <div class="lockicon">🔒</div>
+              <div class="time">9:41</div>
+              <div class="date">Monday, June 3</div>
+            </div>
+            <div class="stack">
+              <div class="notif">
+                <div class="n-top"><span class="n-app">✌️</span><span>FRANK·U</span><span class="n-ago">now</span></div>
+                <p class="n-title">Nag 3 of 5</p>
+                <p class="n-body">Get off your ass. The gym misses you.</p>
+              </div>
+              <div class="notif n2">
+                <div class="n-top"><span class="n-app">✌️</span><span>FRANK·U</span><span class="n-ago">15m ago</span></div>
+                <p class="n-title">Still here.</p>
+                <p class="n-body">So is the gym. Funny how that works.</p>
+              </div>
+              <div class="notif n3">
+                <div class="n-top"><span class="n-app">✌️</span><span>FRANK·U</span><span class="n-ago">30m ago</span></div>
+                <p class="n-title">Gym time ✌️</p>
+                <p class="n-body">7:30, like you asked. You got this.</p>
+              </div>
+            </div>
+            <div class="homebar"></div>
+          </div>
+        </div></div><span class="p-label">The escalation</span></div>
+        <div class="iphone13"><div class="frame"><div class="screen">
+          <div class="app s-zero">
+            <div class="statusbar"><span>9:41</span><span class="icons">▐▐ ⏻</span></div>
+            <div class="body">
+              <div class="face">😶</div>
+              <h1>Frank is speechless.</h1>
+              <p class="sub">Everything's done. Enjoy the silence — it won't last.</p>
+              <div class="streak">
+                <span class="fire">🔥</span>
+                <span><span class="s-n">6-day streak</span><br><span class="s-t">longest yet · keep Frank quiet</span></span>
+              </div>
+            </div>
+            <span class="fab">+</span>
+          </div>
+        </div></div><span class="p-label">Zero state</span></div>
       </div>
-      <figcaption><span class="fig-n">Fig. 02</span><span><b>The core loop.</b> Left to right: empty state ("Nothing to show!!" — even the empty state has attitude), the list with three fixed filters instead of user-managed folders, the profile with the <b>nagging interval</b> stepper from Bet 02, and the two-field create flow from Bet 03.</span></figcaption>
+      <figcaption><span class="fig-n">Fig. 02</span><span><b>The nag, dialled and delivered</b> <i>(2026 revisit)</i><b>.</b> The nagging interval from Bet 02 grew into "How annoying should Frank be?" — each level speaks in Frank's voice. The lock screen shows the escalation in one glance: three notifications, rising bluntness. And the empty state now has a job — celebrating the streak instead of saying "Nothing to show!!".</span></figcaption>
     </figure>
 
-    <figure class="full">
-      <div class="phone-row cols-3">
-        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/lockscreen-1.png" alt="iPhone lock screen with a FrAnK-U notification reading 'Get off your ass. Time for GYM'"></div></div><span class="p-label">The nudge</span></div>
-        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/lockscreen-2.png" alt="Lock screen notification swiped left revealing Options and Clear actions"></div></div><span class="p-label">Swipe</span></div>
-        <div class="iphone13"><div class="frame"><div class="screen"><img src="images/lockscreen-3.png" alt="Notification options expanded showing Done and Snooze actions"></div></div><span class="p-label">Done / Snooze</span></div>
+    <details class="was">
+      <summary>SEE THE ORIGINAL SCREENS FROM THE 54-HOUR SPRINT</summary>
+      <div class="inner">
+        <p class="row-label">Onboarding — as pitched, Oct 2023</p>
+        <div class="phone-row cols-4">
+          <div class="iphone13"><div class="frame"><div class="screen"><img src="images/onboarding-1.png" alt="FrAnK-U splash screen with a peace-sign emoji as the logo"></div></div><span class="p-label">Splash</span></div>
+          <div class="iphone13"><div class="frame"><div class="screen"><img src="images/onboarding-2.png" alt="Value proposition screen reading 'Make Mundane Tasks Enjoyable' with a Get Started button"></div></div><span class="p-label">Value prop</span></div>
+          <div class="iphone13"><div class="frame"><div class="screen"><img src="images/onboarding-3.png" alt="Sign-in screen with email, Google and Apple sign-in options"></div></div><span class="p-label">Sign in</span></div>
+          <div class="iphone13"><div class="frame"><div class="screen"><img src="images/onboarding-4.png" alt="Empty home state reading 'Nothing to show!!' with a floating add button"></div></div><span class="p-label">First run</span></div>
+        </div>
+        <p class="row-label">Core loop — as pitched, Oct 2023</p>
+        <div class="phone-row cols-5">
+          <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-1.png" alt="Empty state with an expanded floating action button showing quick-add options"></div></div><span class="p-label">Empty state</span></div>
+          <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-2.png" alt="Reminder list with All, Personal and Work filter pills and six reminders"></div></div><span class="p-label">The list</span></div>
+          <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-3.png" alt="Profile screen with settings and a 'set nagging interval' stepper control"></div></div><span class="p-label">Nagging interval</span></div>
+          <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-4.png" alt="Create reminder screen with just a title field and a when field"></div></div><span class="p-label">Create — empty</span></div>
+          <div class="iphone13"><div class="frame"><div class="screen"><img src="images/core-5.png" alt="Create reminder screen filled in with 'Gym' at 7:30am"></div></div><span class="p-label">Create — filled</span></div>
+        </div>
+        <p class="row-label">Lock screen — as pitched, Oct 2023</p>
+        <div class="phone-row cols-3">
+          <div class="iphone13"><div class="frame"><div class="screen"><img src="images/lockscreen-1.png" alt="iPhone lock screen with a FrAnK-U notification reading 'Get off your ass. Time for GYM'"></div></div><span class="p-label">The nudge</span></div>
+          <div class="iphone13"><div class="frame"><div class="screen"><img src="images/lockscreen-2.png" alt="Lock screen notification swiped left revealing Options and Clear actions"></div></div><span class="p-label">Swipe</span></div>
+          <div class="iphone13"><div class="frame"><div class="screen"><img src="images/lockscreen-3.png" alt="Notification options expanded showing Done and Snooze actions"></div></div><span class="p-label">Done / Snooze</span></div>
+        </div>
       </div>
-      <figcaption><span class="fig-n">Fig. 03</span><span><b>Where the product actually lives.</b> The lock-screen notification is the real UI — most users will interact with Frank here, not in the app. Swipe actions resolve to <b>Done</b> or <b>Snooze</b>, and snoozing is what triggers the nagging escalation.</span></figcaption>
-    </figure>
+    </details>
 
     <figure class="full">
       <img src="https://framerusercontent.com/images/rhkpgkgEYkHnOCavEfqV36LmKs.jpg" alt="FrAnK-U landing page with the headline 'Get shit done' over a dark gradient, and a merch shop page selling branded t-shirts, tote bags and mugs">
-      <figcaption><span class="fig-n">Fig. 04</span><span><b>The landing page led the pitch.</b> "Get shit done" was a deliberate risk — it filters for exactly the audience the product wants. The merch shop wasn't decoration: it supported the business-model slide by showing the brand could monetise beyond subscriptions.</span></figcaption>
+      <figcaption><span class="fig-n">Fig. 03</span><span><b>The landing page led the pitch.</b> "Get shit done" was a deliberate risk — it filters for exactly the audience the product wants. The merch shop wasn't decoration: it supported the business-model slide by showing the brand could monetise beyond subscriptions.</span></figcaption>
     </figure>
 
     <span class="todo"><b>Add before publishing</b>
